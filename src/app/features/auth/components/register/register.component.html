@@ -1,0 +1,100 @@
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-300">
+    <div class="flex w-[900px] min-h-[550px] bg-white rounded-2xl shadow-xl overflow-hidden">
+        <!-- Left Side: Decorative Panel -->
+        <div
+            class="flex-1 bg-gradient-to-br from-purple-600 to-blue-500 text-white flex flex-col justify-center items-center p-8">
+            <h2 class="text-4xl font-bold mb-4">Join Us</h2>
+            <p class="text-lg opacity-90">Create your account to get started</p>
+        </div>
+
+        <!-- Right Side: Registration Form -->
+        <div class="flex-[1.5] p-6 flex flex-col justify-center overflow-y-auto">
+            <div class="text-center mb-6">
+                <h3 class="text-2xl font-semibold text-gray-800">Register</h3>
+            </div>
+
+            <form [formGroup]="registerForm" class="flex flex-col gap-4">
+                <!-- First Name Field -->
+                <div class="flex flex-col">
+                    <label for="firstName" class="text-sm font-medium text-gray-600 mb-1">First Name</label>
+                    <input id="firstName" type="text"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Enter your first name" formControlName="firstName">
+                    <div *ngIf="isFieldInvalid('firstName')" class="text-red-600 text-xs mt-1">
+                        {{ getErrorMessage('firstName') }}
+                    </div>
+                </div>
+
+                <!-- Last Name Field -->
+                <div class="flex flex-col">
+                    <label for="lastName" class="text-sm font-medium text-gray-600 mb-1">Last Name</label>
+                    <input id="lastName" type="text"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Enter your last name" formControlName="lastName">
+                    <div *ngIf="isFieldInvalid('lastName')" class="text-red-600 text-xs mt-1">
+                        {{ getErrorMessage('lastName') }}
+                    </div>
+                </div>
+
+                <!-- Email Field -->
+                <div class="flex flex-col">
+                    <label for="email" class="text-sm font-medium text-gray-600 mb-1">Email</label>
+                    <input id="email" type="email"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Enter your email" formControlName="email">
+                    <div *ngIf="isFieldInvalid('email')" class="text-red-600 text-xs mt-1">
+                        {{ getErrorMessage('email') }}
+                    </div>
+                </div>
+
+                <!-- Phone Number Field -->
+                <div class="flex flex-col">
+                    <label for="phone" class="text-sm font-medium text-gray-600 mb-1">Phone Number</label>
+                    <input id="phone" type="tel"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Enter your phone number" formControlName="phone">
+                    <div *ngIf="isFieldInvalid('phone')" class="text-red-600 text-xs mt-1">
+                        {{ getErrorMessage('phone') }}
+                    </div>
+                </div>
+
+                <!-- Password Field -->
+                <div class="flex flex-col">
+                    <label for="password" class="text-sm font-medium text-gray-600 mb-1">Password</label>
+                    <input id="password" type="password"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Enter your password" formControlName="password">
+                    <div *ngIf="isFieldInvalid('password')" class="text-red-600 text-xs mt-1">
+                        {{ getErrorMessage('password') }}
+                    </div>
+                </div>
+
+                <!-- Confirm Password Field -->
+                <div class="flex flex-col">
+                    <label for="confirmPassword" class="text-sm font-medium text-gray-600 mb-1">Confirm Password</label>
+                    <input id="confirmPassword" type="password"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Confirm your password" formControlName="confirmPassword">
+                    <div *ngIf="isFieldInvalid('confirmPassword') || registerForm.hasError('passwordsMismatch')"
+                        class="text-red-600 text-xs mt-1">
+                        {{ getErrorMessage('confirmPassword') }}
+                    </div>
+                </div>
+
+                <!-- Register Button -->
+                <button [disabled]="registerForm.invalid"
+                    class="w-full py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                    (click)="registerFormSubmit()">
+                    Register
+                </button>
+
+                <!-- Login Link -->
+                <div class="text-center text-sm text-gray-600 mt-4">
+                    <span>Already have an account?</span>
+                    <button class="text-blue-500 font-semibold hover:underline bg-transparent border-none p-0 ml-1"
+                        (click)="goToLogin()">Sign In Here</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

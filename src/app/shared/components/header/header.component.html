@@ -1,0 +1,50 @@
+<header class="bg-gray-900 text-white py-6 sticky top-0 z-50 shadow-md">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <!-- Logo -->
+        <div class="flex items-center">
+            <span class="text-3xl font-bold tracking-wider">
+                <span class="text-indigo-500">META</span><span class="text-gray-100">VITE</span>
+            </span>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="hidden md:flex items-center gap-8">
+            <a *ngFor="let link of navLinks" [href]="link.url"
+                class="text-gray-300 hover:text-indigo-500 transition-colors duration-300 font-medium">
+                {{ link.label }}
+            </a>
+            <a *ngIf="isLoggedIn" [routerLink]="['/my-posts']"
+                class="text-gray-300 hover:text-indigo-500 transition-colors duration-300 font-medium">
+                My Posts
+            </a>
+
+            <button (click)="writePost()"
+                class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300">
+                Write a Post
+            </button>
+        </nav>
+
+        <!-- User Section -->
+        <div class="flex items-center gap-4">
+            <span class="text-gray-300">
+                Hi, {{ isLoggedIn ? userName : 'Guest' }}
+            </span>
+            <button *ngIf="!isLoggedIn" (click)="login()"
+                class="bg-transparent border border-indigo-500 text-indigo-500 hover:bg-indigo-500 hover:text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300">
+                Login
+            </button>
+            <button *ngIf="isLoggedIn" (click)="logout()"
+                class="bg-transparent border border-indigo-500 text-indigo-500 hover:bg-indigo-500 hover:text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300">
+                Logout
+            </button>
+        </div>
+
+        <!-- Mobile Menu Toggle (Optional) -->
+        <button class="md:hidden text-gray-300 hover:text-indigo-500 focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            </svg>
+        </button>
+    </div>
+</header>

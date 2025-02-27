@@ -1,0 +1,24 @@
+<div *ngIf="comments" class="mt-8 bg-gray-50 p-6 rounded-xl shadow-md">
+    <h3 class="text-2xl font-bold text-gray-800 text-center mb-6">
+        {{ comments.length || 0 }} Comments
+    </h3>
+
+    <!-- Iterate through the comments array -->
+    <div *ngFor="let comment of comments" class="bg-white p-5 rounded-lg shadow-sm mb-4 flex items-start">
+        <div class="flex-1">
+            <div class="flex justify-between items-center mb-2">
+                <h4 class="text-lg font-semibold text-indigo-600">{{ comment.name }}</h4>
+                <!-- Uncomment and adjust if date is available -->
+                <!-- <span class="text-sm text-gray-500 italic">
+          <i class="fas fa-clock mr-1"></i>{{ comment.date | date: 'longDate' }}
+        </span> -->
+            </div>
+            <div class="text-gray-600 text-base leading-relaxed">{{ comment.comment }}</div>
+        </div>
+    </div>
+
+    <!-- No Comments Message -->
+    <div *ngIf="comments.length === 0" class="text-center text-gray-500 italic">
+        No comments yet. Be the first to comment!
+    </div>
+</div>

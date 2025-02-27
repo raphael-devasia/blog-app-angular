@@ -1,0 +1,108 @@
+<app-header></app-header>
+<section class="py-12 bg-gray-50">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center mb-8">
+            <h4 class="text-3xl font-bold text-gray-900">Create New Post</h4>
+        </div>
+
+        <div class="bg-white shadow-xl rounded-2xl p-6 md:p-8">
+            <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <!-- Left Column -->
+                    <div class="space-y-6">
+                        <!-- Post Title -->
+                        <div>
+                            <label for="postTitle" class="block text-sm font-medium text-gray-700 mb-2">Post
+                                Title</label>
+                            <input type="text" id="postTitle" formControlName="title" placeholder="Enter post title"
+                                (keyup)="onTitleChanged($event)"
+                                class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                [ngClass]="{'border-red-500': (fc['title'].dirty || fc['title'].touched) && fc['title'].errors}" />
+                            <p *ngIf="shouldShowError('title', 'required')" class="text-red-500 text-sm mt-1">
+                                Title is required.
+                            </p>
+                            <p *ngIf="shouldShowError('title', 'pattern')" class="text-red-500 text-sm mt-1">
+                                Title must contain letters only (spaces allowed).
+                            </p>
+                            <p *ngIf="shouldShowError('title', 'minlength')" class="text-red-500 text-sm mt-1">
+                                Title must be more than 5 characters.
+                            </p>
+                        </div>
+
+                        <!-- Permalink -->
+                        <div>
+                            <label for="postPermalink"
+                                class="block text-sm font-medium text-gray-700 mb-2">Permalink</label>
+                            <input type="text" id="postPermalink" formControlName="permalink" [(ngModel)]="permalink"
+                                name="permalink" readonly
+                                class="w-full p-4 border border-gray-200 bg-gray-100 rounded-lg text-gray-600 cursor-not-allowed" />
+                        </div>
+
+                        <!-- Excerpt -->
+                        <div>
+                            <label for="postExcerpt"
+                                class="block text-sm font-medium text-gray-700 mb-2">Excerpt</label>
+                            <textarea id="postExcerpt" formControlName="excerpt"
+                                placeholder="Enter excerpt (minimum 10 characters)"
+                                class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent min-h-[100px] resize-y"
+                                [ngClass]="{'border-red-500': (fc['excerpt'].dirty || fc['excerpt'].touched) && fc['excerpt'].errors}"></textarea>
+                            <p *ngIf="shouldShowError('excerpt', 'required')" class="text-red-500 text-sm mt-1">
+                                Excerpt is required.
+                            </p>
+                            <p *ngIf="shouldShowError('excerpt', 'minlength')" class="text-red-500 text-sm mt-1">
+                                Excerpt must be more than 10 characters.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="space-y-6">
+                       
+
+                        <!-- Image Upload -->
+                        <div>
+                            <label for="postImage" class="block text-sm font-medium text-gray-700 mb-2">Choose
+                                Image</label>
+                            <div *ngIf="isLoading" class="flex items-center justify-center mb-4">
+                                <div
+                                    class="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin">
+                                </div>
+                                <p class="ml-2 text-gray-600">Uploading...</p>
+                            </div>
+                            <img *ngIf="imgSrc && !isLoading" [src]="imgSrc" alt="Post Image Preview"
+                                class="w-full max-h-72 object-cover rounded-lg border border-gray-200 mb-4" />
+                            <input type="file" id="postImage" accept="image/*" (change)="showPreview($event)"
+                                class="w-full p-3 border border-gray-300 rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-indigo-500 file:text-white file:hover:bg-indigo-600" />
+                            <div class="text-red-500 text-sm mt-1" *ngIf="shouldShowError('image', 'required')">
+                                Image is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Post Body Editor -->
+                <div class="mb-8">
+                    <label for="postBody" class="block text-sm font-medium text-gray-700 mb-2">Post Body</label>
+                    <angular-editor [config]="editorConfig" formControlName="content"
+                        placeholder="Add your content here" class="border border-gray-300 rounded-lg"></angular-editor>
+                    <p *ngIf="shouldShowError('content', 'required')" class="text-red-500 text-sm mt-1">
+                        Content is required.
+                    </p>
+                    <p *ngIf="shouldShowError('content', 'minlength')" class="text-red-500 text-sm mt-1">
+                        Content must be more than 10 characters.
+                    </p>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex justify-end">
+                    <button type="submit"
+                        class="bg-indigo-500 text-white font-semibold py-3 px-8 rounded-full hover:bg-indigo-600 transition-colors duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        [disabled]="!isFormValidExceptImage()">
+                        Publish Post
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<app-footer></app-footer>

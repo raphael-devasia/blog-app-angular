@@ -1,0 +1,50 @@
+<form *ngIf="userId" [formGroup]="commentForm" (ngSubmit)="onSubmit()" class="bg-gray-50 p-6 rounded-xl shadow-md mb-8">
+    <h3 class="text-2xl font-bold text-gray-800 text-center mb-6">Leave a Comment</h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Comment Field -->
+        <div class="md:col-span-2">
+            <textarea formControlName="comment" placeholder="Your comment"
+                class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-y min-h-[120px]"
+                [ngClass]="{'border-red-500': submitted && f['comment'].errors}"></textarea>
+            <p *ngIf="submitted && f['comment'].errors" class="text-red-500 text-sm mt-1">
+                {{ getErrorMessage('comment') }}
+            </p>
+        </div>
+
+        <!-- Name Field -->
+        <div>
+            <input type="text" formControlName="name" placeholder="Your name"
+                class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                [ngClass]="{'border-red-500': submitted && f['name'].errors}" />
+            <p *ngIf="submitted && f['name'].errors" class="text-red-500 text-sm mt-1">
+                {{ getErrorMessage('name') }}
+            </p>
+        </div>
+
+        <!-- Email Field -->
+        <div>
+            <input type="email" formControlName="email" placeholder="Your email"
+                class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                [ngClass]="{'border-red-500': submitted && f['email'].errors}" />
+            <p *ngIf="submitted && f['email'].errors" class="text-red-500 text-sm mt-1">
+                {{ getErrorMessage('email') }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center mt-6">
+        <button type="submit"
+            class="bg-indigo-500 text-white font-semibold py-3 px-8 rounded-lg hover:bg-indigo-600 transition-colors duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            [disabled]="commentForm.invalid && submitted">
+            Submit Comment
+        </button>
+    </div>
+</form>
+
+<!-- Message if not logged in -->
+<div *ngIf="!userId" class="text-center p-6 bg-gray-50 rounded-xl shadow-md mb-8">
+    <p class="text-gray-600">Please log in to leave a comment.</p>
+    <a routerLink="/login" class="text-indigo-500 font-semibold hover:underline">Login here</a>
+</div>
