@@ -101,20 +101,7 @@ export class ListComponent implements OnInit {
     console.log('Edit post:', postId);
   }
 
-  // deletePost(postId: string) {
-  //   if (confirm('Are you sure you want to delete this post?')) {
-  //     this.userService.deletePost(postId).subscribe({
-  //       next: () => {
-  //         this.toastr.success('Post deleted successfully');
-  //         this.blogs = this.blogs.filter((blog: Post) => blog._id !== postId);
-  //       },
-  //       error: (error) => {
-  //         this.toastr.error('Failed to delete post');
-  //         console.error('Delete error:', error);
-  //       },
-  //     });
-  //   }
-  // }
+ 
 
   deletePost(postId: string) {
     this.showDeleteModal = true;

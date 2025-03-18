@@ -47,4 +47,10 @@ export class UserService {
 
     return this.http.post<any>(`${this.backendUrl}/comments`, comment);
   }
+
+  deleteComment(commentId: any): Observable<any> {
+    console.log('the comment is ', commentId);
+
+    return this.http.delete<any>(`${this.backendUrl}/comments/${commentId}`);
+  }
 }

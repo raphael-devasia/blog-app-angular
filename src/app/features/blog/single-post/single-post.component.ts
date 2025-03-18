@@ -24,7 +24,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class SinglePostComponent {
   postId!: string;
- 
+
   posts!: Post;
   userId!: string;
   comments: any[] = [];
@@ -38,13 +38,11 @@ export class SinglePostComponent {
     // Get the user ID from the route parameters
     this.route.paramMap.subscribe((params) => {
       this.postId = params.get('postId') || ''; // 'id' is the dynamic route parameter
-      
+
       console.log('the param is ', this.postId);
     });
-     const userProfile = JSON.parse(
-       localStorage.getItem('userProfile') || '{}'
-     );
-     this.userId = userProfile.userId || '';
+    const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+    this.userId = userProfile.userId || '';
 
     this.getPost();
     this.fetchComments();
@@ -60,18 +58,20 @@ export class SinglePostComponent {
       },
     });
   }
-  
+
   getPost() {
     this.userService.getPostById(this.postId).subscribe(
       (data: any) => {
         this.posts = data.data;
         console.log(this.posts);
         // this.userId=this.posts.userId;
-       
       },
       (error) => {
         this.toastr.error('Failed to fetch post');
       }
     );
+  }
+  onCommentSubmitted() {
+    this.fetchComments(); // Refresh comments for both top-level and replies
   }
 }

@@ -1,12 +1,15 @@
 <form *ngIf="userId" [formGroup]="commentForm" (ngSubmit)="onSubmit()" class="bg-gray-50 p-6 rounded-xl shadow-md mb-8">
-    <h3 class="text-2xl font-bold text-gray-800 text-center mb-6">Leave a Comment</h3>
+    <h3 class="text-2xl font-bold text-gray-800 text-center mb-6">
+        {{ parentCommentId ? 'Reply to Comment' : 'Leave a Comment' }}
+    </h3>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Comment Field -->
         <div class="md:col-span-2">
-            <textarea formControlName="comment" placeholder="Your comment"
+            <textarea formControlName="comment" [placeholder]="parentCommentId ? 'Your reply...' : 'Your comment'"
                 class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-y min-h-[120px]"
-                [ngClass]="{'border-red-500': submitted && f['comment'].errors}"></textarea>
+                [ngClass]="{'border-red-500': submitted && f['comment'].errors}">
+            </textarea>
             <p *ngIf="submitted && f['comment'].errors" class="text-red-500 text-sm mt-1">
                 {{ getErrorMessage('comment') }}
             </p>
@@ -38,7 +41,7 @@
         <button type="submit"
             class="bg-indigo-500 text-white font-semibold py-3 px-8 rounded-lg hover:bg-indigo-600 transition-colors duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
             [disabled]="commentForm.invalid && submitted">
-            Submit Comment
+            {{ parentCommentId ? 'Submit Reply' : 'Submit Comment' }}
         </button>
     </div>
 </form>

@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.loginUser(formValue).subscribe(
       (res: any) => {
-        console.log(res.data);
+        
         localStorage.setItem('userToken', res.data.token); // Save token in localStorage
         localStorage.setItem('userProfile', JSON.stringify(res.data)); // Save entire user object as string
 

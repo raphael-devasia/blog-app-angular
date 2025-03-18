@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -6,8 +6,6 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-// import { UserService } from '../../services/user.service';
-// import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../../core/services/user.service';
 import { ToastrService } from 'ngx-toastr';
@@ -22,8 +20,10 @@ import { ToastrService } from 'ngx-toastr';
 export class CommentFormComponent implements OnInit {
   @Input() postId!: string;
   @Input() userId!: string;
+  @Input() parentCommentId?: string; // Optional input for replies
 
-  comments: any[] = [];
+  @Output() commentSubmitted = new EventEmitter<any>(); // Emit new comment/reply
+
   commentForm!: FormGroup;
   submitted = false;
 
@@ -31,9 +31,17 @@ export class CommentFormComponent implements OnInit {
     private fb: FormBuilder,
     private userService: UserService,
     private toastr: ToastrService
-  ) {}
+  ) {
+   
+  }
 
   ngOnInit() {
+     const userProfile = JSON.parse(
+       localStorage.getItem('userProfile') || '{}'
+     );
+     this.userId = userProfile.userId;
+    
+     
     if (this.userId) {
       this.initForm();
     }
@@ -47,7 +55,7 @@ export class CommentFormComponent implements OnInit {
     const email = userProfile.email || '';
     this.commentForm = this.fb.group({
       name: [
-        { value: fullName, disabled: true }, // Prefill and disable
+        { value: fullName, disabled: true },
         [
           Validators.required,
           Validators.minLength(3),
@@ -55,7 +63,7 @@ export class CommentFormComponent implements OnInit {
         ],
       ],
       email: [
-        { value: email, disabled: true }, // Prefill and disable
+        { value: email, disabled: true },
         [
           Validators.required,
           Validators.email,
@@ -96,7 +104,6 @@ export class CommentFormComponent implements OnInit {
       return;
     }
 
-    // const formValues = this.commentForm.value;
     const formValues = this.commentForm.getRawValue();
     const commentData = {
       name: formValues.name.trim(),
@@ -104,27 +111,31 @@ export class CommentFormComponent implements OnInit {
       comment: formValues.comment.trim(),
       postId: this.postId,
       userId: this.userId,
+      ...(this.parentCommentId && { parentCommentId: this.parentCommentId }), // Add parentCommentId if present
     };
+
 
     this.userService.createComment(commentData).subscribe({
       next: (response) => {
-        this.toastr.success('Comment posted successfully');
+        this.toastr.success(
+          this.parentCommentId
+            ? 'Reply posted successfully'
+            : 'Comment posted successfully'
+        );
+        this.commentSubmitted.emit(); // Emit the new comment/reply
         this.resetForm();
       },
       error: (error) => {
-        this.toastr.error('Error posting comment');
+        this.toastr.error(
+          'Error posting ' + (this.parentCommentId ? 'reply' : 'comment')
+        );
         console.error('Error:', error);
       },
     });
   }
 
-  // resetForm() {
-  //   this.submitted = false;
-  //   this.commentForm.reset();
-  // }
   resetForm() {
     this.submitted = false;
-    // Reset only the comment field, keep name and email disabled with original values
     const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
     const fullName = `${userProfile.firstName || ''} ${
       userProfile.lastName || ''

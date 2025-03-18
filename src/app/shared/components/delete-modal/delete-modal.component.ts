@@ -9,17 +9,23 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class DeleteModalComponent {
   @Input() selectedPostId!: string;
+  @Input() selectedCommentId!: string;
 
   @Output() closeModal = new EventEmitter<void>();
   @Input() deleteItem!: (userId: string, target: string) => void;
+  @Input() deleteComment!: (commentId: string, target: string) => void;
 
   onclose() {
     this.closeModal.emit();
   }
   onDelete() {
     console.log(this.selectedPostId);
-
-    this.deleteItem(this.selectedPostId, 'post');
-    this.onclose();
+    if (this.selectedCommentId) {
+      this.deleteComment(this.selectedCommentId, 'comment');
+      this.onclose();
+    } else if (this.selectedPostId) {
+      this.deleteItem(this.selectedPostId, 'post');
+      this.onclose();
+    }
   }
 }

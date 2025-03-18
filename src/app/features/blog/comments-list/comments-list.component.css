@@ -1,0 +1,50 @@
+.comment-tree {
+  position: relative;
+}
+
+.comment-node {
+  position: relative;
+}
+
+.replies-container {
+  position: relative;
+}
+
+/* Connecting line from parent to replies */
+.comment-node[data-depth] .replies-container::before {
+  content: '';
+  position: absolute;
+  top: -1rem; /* Adjust to connect to the parent */
+  left: -1rem; /* Align with the parent's left edge */
+  width: 1px;
+  height: calc(100% + 1rem); /* Extend to cover all replies */
+  background-color: #d1d5db; /* Gray-300 */
+}
+
+/* Horizontal line connecting to each reply */
+.reply-item {
+  position: relative;
+}
+
+.reply-item::before {
+  content: '';
+  position: absolute;
+  top: 1.5rem; /* Align with the middle of the reply content */
+  left: -1rem; /* Connect to the vertical line */
+  width: 1rem; /* Length of the horizontal line */
+  height: 1px;
+  background-color: #d1d5db; /* Gray-300 */
+}
+
+/* Adjust indentation for deeper levels */
+.ml-8 { margin-left: 2rem; }
+.ml-16 { margin-left: 4rem; }
+.ml-24 { margin-left: 6rem; }
+.ml-32 { margin-left: 8rem; }
+.ml-40 { margin-left: 10rem; }
+/* Add more as needed for deeper levels */
+
+/* Ensure top-level comments don't have unnecessary lines */
+.comment-node[data-depth="0"] .replies-container::before {
+  top: 0; /* Start from the top of the replies section */
+}
