@@ -2,13 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { Post } from '../model/post';
+import { SuccessResponse } from '../model/api-response.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UploadServiceService {
   constructor(private http: HttpClient) {}
- 
+
   private backendUrl = environment.backendUrl;
 
   generatePresignedUrl(
@@ -34,10 +36,19 @@ export class UploadServiceService {
       })
       .pipe(map(() => fileUrl));
   }
-  postBlogPost(post: any): Observable<any> {
-    return this.http.post(`${this.backendUrl}/posts`, post);
+  postBlogPost(post: Post): Observable<SuccessResponse<Post>> {
+    return this.http.post<SuccessResponse<Post>>(
+      `${this.backendUrl}/posts`,
+      post
+    );
   }
-  updateBlogPost(post: any, postId: string): Observable<any> {
-    return this.http.put(`${this.backendUrl}/posts/${postId}`, post);
+  updateBlogPost(
+    post: Post,
+    postId: string
+  ): Observable<SuccessResponse<Post>> {
+    return this.http.put<SuccessResponse<Post>>(
+      `${this.backendUrl}/posts/${postId}`,
+      post
+    );
   }
 }

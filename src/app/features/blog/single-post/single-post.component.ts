@@ -8,6 +8,7 @@ import { Post } from '../../../core/model/post';
 import { UserService } from '../../../core/services/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { CommentServiceService } from '../../../core/services/comment-service.service';
 
 @Component({
   selector: 'app-single-post',
@@ -30,6 +31,7 @@ export class SinglePostComponent {
   comments: any[] = [];
 
   private userService = inject(UserService);
+  private commentService = inject(CommentServiceService);
 
   toastr = inject(ToastrService);
 
@@ -48,7 +50,7 @@ export class SinglePostComponent {
     this.fetchComments();
   }
   fetchComments() {
-    this.userService.getPostComments(this.postId).subscribe({
+    this.commentService.getPostComments(this.postId).subscribe({
       next: (response: any) => {
         this.comments = response.data;
       },

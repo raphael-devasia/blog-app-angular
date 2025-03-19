@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -9,11 +9,13 @@ import {
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../../core/services/user.service';
 import { ToastrService } from 'ngx-toastr';
+import { CommentServiceService } from '../../../core/services/comment-service.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-comment-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule,RouterLink],
   templateUrl: './comment-form.component.html',
   styleUrls: ['./comment-form.component.css'],
 })
@@ -23,7 +25,7 @@ export class CommentFormComponent implements OnInit {
   @Input() parentCommentId?: string; // Optional input for replies
 
   @Output() commentSubmitted = new EventEmitter<any>(); // Emit new comment/reply
-
+  private commentService = inject(CommentServiceService);
   commentForm!: FormGroup;
   submitted = false;
 
@@ -115,7 +117,7 @@ export class CommentFormComponent implements OnInit {
     };
 
 
-    this.userService.createComment(commentData).subscribe({
+    this.commentService.createComment(commentData).subscribe({
       next: (response) => {
         this.toastr.success(
           this.parentCommentId

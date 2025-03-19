@@ -4,6 +4,7 @@ import { CommentFormComponent } from '../comment-form/comment-form.component'; /
 import { UserService } from '../../../core/services/user.service'; // Adjust path
 import { ToastrService } from 'ngx-toastr';
 import { DeleteModalComponent } from '../../../shared/components/delete-modal/delete-modal.component';
+import { CommentServiceService } from '../../../core/services/comment-service.service';
 
 @Component({
   selector: 'app-comments-list',
@@ -19,7 +20,7 @@ export class CommentsListComponent implements OnInit {
   showDeleteModal: boolean = false;
   selectedCommentId!: string;
   toastr = inject(ToastrService);
-
+  private commentService = inject(CommentServiceService);
   showReplyForm: { [key: string]: boolean } = {};
 
   constructor(private userService: UserService) {}
@@ -28,7 +29,7 @@ export class CommentsListComponent implements OnInit {
   }
 
   loadComments() {
-    this.userService.getPostComments(this.postId).subscribe({
+    this.commentService.getPostComments(this.postId).subscribe({
       next: (response: any) => {
         this.comments = response.data;
       },
@@ -60,7 +61,7 @@ export class CommentsListComponent implements OnInit {
         'Are you sure you want to delete this comment and all its replies?'
       )
     ) {
-      this.userService.deleteComment(commentId).subscribe({
+      this.commentService.deleteComment(commentId).subscribe({
         next: () => {
           this.comments = this.removeCommentFromTree(this.comments, commentId);
         },
@@ -70,7 +71,7 @@ export class CommentsListComponent implements OnInit {
   }
   deleteResource(commentId: string, target: string): void {
     console.log(`Deleting ${target} with ID: ${commentId}`);
-    this.userService.deleteComment(commentId).subscribe({
+    this.commentService.deleteComment(commentId).subscribe({
       next: () => {
         this.comments = this.removeCommentFromTree(this.comments, commentId);
         this.toastr.success(`${target} deleted successfully`, 'Success');

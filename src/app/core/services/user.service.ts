@@ -1,7 +1,52 @@
+// import { HttpClient } from '@angular/common/http';
+// import { Injectable } from '@angular/core';
+// import { Observable } from 'rxjs';
+// import { environment } from '../../environments/environment';
+
+// @Injectable({
+//   providedIn: 'root',
+// })
+// export class UserService {
+//   private backendUrl = environment.backendUrl;
+
+//   private userProfile = JSON.parse(localStorage.getItem('userProfile')!);
+//   private userId: string | null = null;
+
+//   constructor(private http: HttpClient) {}
+
+//   getPosts(): Observable<any[]> {
+//     return this.http.get<any[]>(`${this.backendUrl}/posts/all/${this.userId}`);
+//   }
+//   getAllPosts(): Observable<any[]> {
+//     return this.http.get<any[]>(`${this.backendUrl}/posts/all`);
+//   }
+//   getAllUserPosts(userId: string): Observable<any[]> {
+//     return this.http.get<any[]>(`${this.backendUrl}/posts/all/${userId}`);
+//   }
+//   getPostById(postId: string): Observable<any> {
+//     return this.http.get<any>(`${this.backendUrl}/posts/${postId}`);
+//   }
+
+//   deletePost(postId: string): Observable<void> {
+//     return this.http.delete<void>(`${this.backendUrl}/posts/${postId}`);
+//   }
+
+//   toggleFeatured(postId: string, isFeatured: boolean): Observable<void> {
+//     return this.http.patch<void>(`${this.backendUrl}/posts/${postId}`, {
+//       isFeatured: isFeatured,
+//     });
+//   }
+  
+// }
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+
+import { SuccessMessageResponse, SuccessResponse } from '../model/api-response.interface';
+import { Post } from '../model/post';
+
+
 
 @Injectable({
   providedIn: 'root',
@@ -9,48 +54,50 @@ import { environment } from '../../environments/environment';
 export class UserService {
   private backendUrl = environment.backendUrl;
 
-  private userProfile = JSON.parse(localStorage.getItem('userProfile')!);
-  private userId: string | null = null;
+  private userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+  private userId: string | null = this.userProfile?.userId || null; // Type-safe access
 
   constructor(private http: HttpClient) {}
 
-  getPosts(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.backendUrl}/posts/all/${this.userId}`);
-  }
-  getAllPosts(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.backendUrl}/posts/all`);
-  }
-  getAllUserPosts(userId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.backendUrl}/posts/all/${userId}`);
-  }
-  getPostById(postId: string): Observable<any> {
-    return this.http.get<any>(`${this.backendUrl}/posts/${postId}`);
+  getPosts(): Observable<SuccessResponse<Post[]>> {
+    return this.http.get<SuccessResponse<Post[]>>(
+      `${this.backendUrl}/posts/all/${this.userId}`
+    );
   }
 
-  deletePost(postId: string): Observable<void> {
-    return this.http.delete<void>(`${this.backendUrl}/posts/${postId}`);
+  getAllPosts(): Observable<SuccessResponse<Post[]>> {
+    return this.http.get<SuccessResponse<Post[]>>(
+      `${this.backendUrl}/posts/all`
+    );
   }
 
-  toggleFeatured(postId: string, isFeatured: boolean): Observable<void> {
-    return this.http.patch<void>(`${this.backendUrl}/posts/${postId}`, {
-      isFeatured: isFeatured,
-    });
-  }
-  getPostComments(postId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.backendUrl}/comments/${postId}`);
-  }
-  getUserComments(userId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.backendUrl}/posts/all/${userId}`);
-  }
-  createComment(comment: any): Observable<any> {
-    console.log('the comment is ', comment);
-
-    return this.http.post<any>(`${this.backendUrl}/comments`, comment);
+  getAllUserPosts(userId: string): Observable<SuccessResponse<Post[]>> {
+    return this.http.get<SuccessResponse<Post[]>>(
+      `${this.backendUrl}/posts/all/${userId}`
+    );
   }
 
-  deleteComment(commentId: any): Observable<any> {
-    console.log('the comment is ', commentId);
+  getPostById(postId: string): Observable<SuccessResponse<Post>> {
+    return this.http.get<SuccessResponse<Post>>(
+      `${this.backendUrl}/posts/${postId}`
+    );
+  }
 
-    return this.http.delete<any>(`${this.backendUrl}/comments/${commentId}`);
+  deletePost(postId: string): Observable<SuccessMessageResponse> {
+    return this.http.delete<SuccessMessageResponse>(
+      `${this.backendUrl}/posts/${postId}`
+    );
+  }
+
+  toggleFeatured(
+    postId: string,
+    isFeatured: boolean
+  ): Observable<SuccessResponse<Post>> {
+    return this.http.patch<SuccessResponse<Post>>(
+      `${this.backendUrl}/posts/${postId}`,
+      {
+        isFeatured: isFeatured,
+      }
+    );
   }
 }

@@ -122,13 +122,7 @@ export class LoginComponent implements OnInit {
     }
     return '';
   }
-  // goToSignup() {
-  //   console.log(this.returnUrl);
-
-  //   this.router.navigate(['sign-up'],{
-  //       queryParams: { returnUrl: this.returnUrl },
-  //     });
-  // }
+ 
   goToSignup() {
     this.navigationService.setReturnUrl(this.returnUrl);
     this.router.navigate(['/sign-up']);
