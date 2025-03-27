@@ -20,8 +20,9 @@ import { FooterComponent } from '../../../shared/components/footer/footer.compon
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    AngularEditorModule,HeaderComponent,FooterComponent
-    
+    AngularEditorModule,
+    HeaderComponent,
+    FooterComponent,
   ],
   templateUrl: './create-post.component.html',
   styleUrl: './create-post.component.css',
@@ -32,7 +33,7 @@ export class CreatePostComponent {
   categories: any[] = [];
   permalink = '';
   imgSrc: string | null =
-    'https://cms-images-project.s3.eu-north-1.amazonaws.com/uploads/1737996539270_placeholder-image.jpg';
+    'https://jotit-article-buck.s3.amazonaws.com/uploads/1743051247303_photo-placeholder-icon-7.jpg';
   postForm: FormGroup;
   content: string = ''; // To hold the content of the editor
   imageUrls: string[] = []; // Store image URLs for later use
@@ -41,7 +42,6 @@ export class CreatePostComponent {
   preURLSigned!: string;
   private userProfile = JSON.parse(localStorage.getItem('userProfile')!);
   private userId = this.userProfile.userId;
-  
 
   constructor(
     private fb: FormBuilder,
@@ -62,7 +62,7 @@ export class CreatePostComponent {
         ],
       ],
       permalink: [''],
-      
+
       content: ['', [Validators.required, Validators.minLength(10)]],
       excerpt: ['', [Validators.required, Validators.minLength(10)]],
       image: ['', [Validators.required]],
@@ -253,7 +253,7 @@ export class CreatePostComponent {
       const postData: Post = {
         title: this.postForm.value.title,
         permalink: this.postForm.value.permalink,
-        
+
         content: this.postForm.value.content,
         image: this.imgSrc as string,
         excerpt: this.postForm.value.excerpt,
